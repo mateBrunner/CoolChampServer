@@ -15,12 +15,15 @@ public class Championship {
     private Playoff playoff;
     @OneToOne(orphanRemoval = true, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     private ChampionshipSettings settings;
+    @OneToOne(orphanRemoval = true, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    private TemporalPlayers temporalPlayers;
 
     public Championship() {}
 
     public Championship(String name) {
         this.status = ChampionshipStatus.NEW;
         this.settings = new ChampionshipSettings(name, "big-round", 2, 3, 8);
+        this.temporalPlayers = new TemporalPlayers();
     }
 
     public void start() {
@@ -41,5 +44,9 @@ public class Championship {
 
     public void setSettings(ChampionshipSettings settings) {
         this.settings = settings;
+    }
+
+    public TemporalPlayers getTemporalPlayers() {
+        return this.temporalPlayers;
     }
 }
