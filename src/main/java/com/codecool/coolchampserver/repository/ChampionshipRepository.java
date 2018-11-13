@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface ChampionshipRepository extends JpaRepository<Championship, Long> {
 
+    Championship findById(Integer id);
+
     @Query("SELECT c FROM Championship c WHERE c.status = com.codecool.coolchampserver.model.ChampionshipStatus.NEW")
     List<Championship> findActualChampionships();
 

@@ -1,17 +1,21 @@
 package com.codecool.coolchampserver.config;
 
 import com.codecool.coolchampserver.model.Championship;
+import com.codecool.coolchampserver.model.ChampionshipSettings;
 import com.codecool.coolchampserver.repository.ChampionshipRepository;
+import com.codecool.coolchampserver.repository.ChampionshipSettingsRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class InitializerBean {
 
-    public InitializerBean(ChampionshipRepository championshipRepository) {
+    public InitializerBean(ChampionshipRepository championshipRepository,
+                           ChampionshipSettingsRepository settingsRepository) {
 
-        championshipRepository.save(new Championship("first"));
-        championshipRepository.save(new Championship("second"));
-        championshipRepository.save(new Championship("third"));
+        //settingsRepository.save(new ChampionshipSettings());
+        championshipRepository.save(new Championship("firsttt"));
+        championshipRepository.save(new Championship("seconddd"));
+        championshipRepository.save(new Championship("thirddd"));
 
     }
 

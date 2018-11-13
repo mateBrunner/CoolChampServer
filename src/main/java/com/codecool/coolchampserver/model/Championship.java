@@ -7,19 +7,20 @@ public class Championship {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String name;
+    private Integer id;
     private ChampionshipStatus status;
     @OneToOne(cascade = CascadeType.ALL)
     private RegularStage regularStage;
     @OneToOne(cascade = CascadeType.ALL)
     private Playoff playoff;
+    @OneToOne(orphanRemoval = true, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    private ChampionshipSettings settings;
 
     public Championship() {}
 
     public Championship(String name) {
-        this.name = name;
-        status = ChampionshipStatus.NEW;
+        this.status = ChampionshipStatus.NEW;
+        this.settings = new ChampionshipSettings(name, "big-round", 2, 3, 8);
     }
 
     public void start() {
@@ -32,8 +33,13 @@ public class Championship {
         return this.id;
     }
 
-    public String getName() {
-        return this.name;
+    public ChampionshipStatus getStatus() { return this.status; }
+
+    public ChampionshipSettings getSettings() {
+        return settings;
     }
 
+    public void setSettings(ChampionshipSettings settings) {
+        this.settings = settings;
+    }
 }
