@@ -15,7 +15,6 @@ public class ChampionshipSettings {
     private int numberOfGroups;
     private int numberOfMatches;
     private int sizeOfPlayoff;
-
     @JsonIgnore
     @OneToOne(mappedBy = "settings")
     private Championship championship;
@@ -23,7 +22,6 @@ public class ChampionshipSettings {
     public ChampionshipSettings(String newChampName, String format, int numberOfGroups, int numberOfMatches, int sizeOfPlayoff) {
         this.newChampName = newChampName;
         this.format = format;
-
         this.numberOfGroups = numberOfGroups;
         this.numberOfMatches = numberOfMatches;
         this.sizeOfPlayoff = sizeOfPlayoff;

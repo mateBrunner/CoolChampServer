@@ -51,8 +51,6 @@ public class ChampionshipService {
 
     @Transactional
     public void updateSettings(Integer id, ChampionshipSettings settings) {
-        System.out.println("update");
-        System.out.println(settings.toString());
         Championship championship = championshipRepository.findById(id);
         championship.setSettings(settings);
         settings.setChampionship(championship);

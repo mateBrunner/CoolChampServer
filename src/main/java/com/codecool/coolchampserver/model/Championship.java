@@ -26,11 +26,6 @@ public class Championship {
         this.temporalPlayers = new TemporalPlayers();
     }
 
-    public void start() {
-        regularStage = new RegularStage();
-        playoff = new Playoff();
-        status = ChampionshipStatus.INPROGRESS;
-    }
 
     public Integer getId() {
         return this.id;
@@ -48,5 +43,11 @@ public class Championship {
 
     public TemporalPlayers getTemporalPlayers() {
         return this.temporalPlayers;
+    }
+
+    public void start() {
+        regularStage = new RegularStage();
+        playoff = new Playoff();
+        status = ChampionshipStatus.INPROGRESS;
     }
 }

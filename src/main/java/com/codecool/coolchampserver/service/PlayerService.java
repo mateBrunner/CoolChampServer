@@ -17,4 +17,10 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
+    public Player addPlayer(String name) {
+        Player newPlayer = new Player(name);
+        playerRepository.save(newPlayer);
+        return newPlayer;
+    }
+
 }
