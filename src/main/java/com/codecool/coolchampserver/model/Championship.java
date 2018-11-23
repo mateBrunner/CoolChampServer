@@ -1,5 +1,7 @@
 package com.codecool.coolchampserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,13 +11,16 @@ public class Championship {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private ChampionshipStatus status;
-    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     private RegularStage regularStage;
-    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     private Playoff playoff;
-    @OneToOne(orphanRemoval = true, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @OneToOne(orphanRemoval = true, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE })
     private ChampionshipSettings settings;
-    @OneToOne(orphanRemoval = true, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @JsonIgnore
+    @OneToOne(orphanRemoval = true, cascade = { CascadeType.ALL })
     private TemporalPlayers temporalPlayers;
 
     public Championship() {}
@@ -33,6 +38,10 @@ public class Championship {
 
     public ChampionshipStatus getStatus() { return this.status; }
 
+    public void setStatus(ChampionshipStatus status) {
+        this.status = status;
+    }
+
     public ChampionshipSettings getSettings() {
         return settings;
     }
@@ -45,9 +54,20 @@ public class Championship {
         return this.temporalPlayers;
     }
 
-    public void start() {
-        regularStage = new RegularStage();
-        playoff = new Playoff();
-        status = ChampionshipStatus.INPROGRESS;
+    public void setTemporalPlayers(TemporalPlayers temporalPlayers) { this.temporalPlayers = temporalPlayers; }
+
+    public RegularStage getRegularStage() {
+        return regularStage;
     }
+
+    public void setRegularStage(RegularStage regularStage) {
+        this.regularStage = regularStage;
+    }
+
+    public Playoff getPlayoff() { return this.playoff; }
+
+    public void setPlayoff(Playoff playoff) {
+        this.playoff = playoff;
+    }
+
 }

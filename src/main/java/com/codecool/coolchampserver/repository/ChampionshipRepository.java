@@ -13,7 +13,8 @@ public interface ChampionshipRepository extends JpaRepository<Championship, Long
 
     Championship findById(Integer id);
 
-    @Query("SELECT c FROM Championship c WHERE c.status = com.codecool.coolchampserver.model.ChampionshipStatus.NEW")
+    @Query("SELECT c FROM Championship c WHERE c.status = com.codecool.coolchampserver.model.ChampionshipStatus.NEW OR " +
+                                              "c.status = com.codecool.coolchampserver.model.ChampionshipStatus.INPROGRESS")
     List<Championship> findActualChampionships();
 
 }

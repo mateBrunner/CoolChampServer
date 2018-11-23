@@ -21,6 +21,11 @@ public class Player {
         this.elo = 1500;
     }
 
+    public Player(String name, Integer elo) {
+        this.name = name;
+        this.elo = elo;
+    }
+
     public Player() {
     }
 
@@ -46,6 +51,11 @@ public class Player {
 
     public void setElo(Integer elo) {
         this.elo = elo;
+    }
+
+    @Override
+    public String toString() {
+        return "id: " + this.id + "  name: " + this.name;
     }
 
 }

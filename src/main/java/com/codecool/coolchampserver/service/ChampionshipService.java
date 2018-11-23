@@ -1,18 +1,11 @@
 package com.codecool.coolchampserver.service;
 
-
-import com.codecool.coolchampserver.httpmodel.ChampPlayerObject;
 import com.codecool.coolchampserver.httpmodel.ChampionshipData;
-import com.codecool.coolchampserver.model.Championship;
-import com.codecool.coolchampserver.model.ChampionshipSettings;
-import com.codecool.coolchampserver.model.ChampionshipStatus;
-import com.codecool.coolchampserver.model.Player;
+import com.codecool.coolchampserver.model.*;
 import com.codecool.coolchampserver.repository.ChampionshipRepository;
 import com.codecool.coolchampserver.repository.PlayerRepository;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +42,11 @@ public class ChampionshipService {
         return championship.getStatus();
     }
 
+    public String getChampionshipFormat(Integer id) {
+        Championship championship = championshipRepository.findById(id);
+        return championship.getSettings().getFormat();
+    }
+
     @Transactional
     public void updateSettings(Integer id, ChampionshipSettings settings) {
         Championship championship = championshipRepository.findById(id);
@@ -75,6 +73,46 @@ public class ChampionshipService {
         Championship newChampionship = new Championship(name);
         championshipRepository.save(newChampionship);
         return newChampionship.getId();
+    }
+
+    public void startChampionship(Integer id) {
+        Championship champ = championshipRepository.findById(id);
+        Set<Player> players = champ.getTemporalPlayers().getPlayers();
+        String format = champ.getSettings().getFormat();
+        if (format.equals("big-round")) {
+            int numberOfMatches = champ.getSettings().getNumberOfMatches();
+            champ.setRegularStage(new BigRoundStage(players, numberOfMatches));
+        } else if (format.equals("group")) {
+            champ.setRegularStage(new GroupStage());
+        }
+        champ.setPlayoff(new Playoff(champ.getSettings().getSizeOfPlayoff()));
+        champ.setStatus(ChampionshipStatus.INPROGRESS);
+        championshipRepository.save(champ);
+    }
+
+    public ChampionshipResult getChampionshipResult(Integer id) {
+        return ChampionshipResult.generateResult(championshipRepository.findById(id));
+    }
+
+    public Playoff getPlayoff(Integer id) {
+        Championship champ = championshipRepository.findById(id);
+        if (champ.getSettings().getFormat().equals("big-round")) {
+            champ.getPlayoff().recountFromBiground(ChampionshipResult.generateResult(champ));
+        }
+        championshipRepository.save(champ);
+        return champ.getPlayoff();
+    }
+
+    @Transactional
+    public void deleteChampionship(Integer id) {
+        Championship champ = championshipRepository.findById(id);
+        championshipRepository.delete(champ);
+    }
+
+    public void archivateChampionship(Integer id) {
+        Championship champ = championshipRepository.findById(id);
+        champ.setStatus(ChampionshipStatus.ARCHIVE);
+        championshipRepository.save(champ);
     }
 
 }

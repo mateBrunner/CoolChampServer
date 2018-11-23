@@ -1,6 +1,8 @@
 package com.codecool.coolchampserver.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,18 +15,15 @@ public class TemporalPlayers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    //@ManyToMany(cascade = CascadeType.ALL)
     private Set<Player> players;
-
-    @OneToOne(mappedBy = "temporalPlayers")
-    private Championship championship;
 
     public TemporalPlayers() {
     }
 
-    public TemporalPlayers(Set<Player> players, Championship championship) {
+    public TemporalPlayers(Set<Player> players) {
         this.players = players;
-        this.championship = championship;
     }
 
     public Set<Player> getPlayers() {
