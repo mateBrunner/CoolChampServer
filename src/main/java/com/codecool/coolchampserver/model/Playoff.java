@@ -13,6 +13,7 @@ public class Playoff {
     private Integer id;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OrderColumn
     private List<PlayoffMatch> matches = new ArrayList<>();
 
     @ElementCollection
@@ -27,7 +28,7 @@ public class Playoff {
             {{1, 16}, {9, 8}, {5, 12}, {13, 4}, {3, 14}, {11, 6}, {7,10}, {15, 2}},
             {{1, 8}, {5, 4}, {3, 6}, {7, 2}},
             {{1, 4}, {3, 2}},
-            {{1, 2}}
+            {{1, 2}, {3, 4}}
     };
 
     public Playoff() {
@@ -115,6 +116,10 @@ public class Playoff {
             nextRow = position.row / 2;
             match = getMatchByPosition(new Position(position.level, nextRow)).getMatch();
             match.clearMatch((position.row % 2) + 1);
+            if (position.level == 3) {
+                match = getMatchByPosition(new Position(3, 1)).getMatch();
+                match.clearMatch((position.row % 2) + 1);
+            }
         }
     }
 

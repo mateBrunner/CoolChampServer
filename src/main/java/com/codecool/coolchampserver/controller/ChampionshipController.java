@@ -132,4 +132,10 @@ public class ChampionshipController {
         return "{\"value\":\"success\"}";
     }
 
+    @PostMapping("/delete-match-result")
+    public String deleteResult(@RequestBody Map<String, Integer> body) {
+        matchService.deleteResult(body.get("id"));
+        return "{\"value\":\"success\"}";
+    }
+
 }

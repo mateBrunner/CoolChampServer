@@ -145,6 +145,13 @@ public class InitializerBean {
         champ1.getTemporalPlayers().addPlayer(player4);
         champ1.getTemporalPlayers().addPlayer(player5);
         champ1.getTemporalPlayers().addPlayer(player6);
+        champ1.getTemporalPlayers().addPlayer(player7);
+        champ1.getTemporalPlayers().addPlayer(player8);
+        champ1.getTemporalPlayers().addPlayer(player9);
+        champ1.getTemporalPlayers().addPlayer(player10);
+        champ1.getTemporalPlayers().addPlayer(player11);
+        champ1.getTemporalPlayers().addPlayer(player12);
+        champ1.getTemporalPlayers().addPlayer(player13);
         championshipRepository.save(champ1);
     }
 

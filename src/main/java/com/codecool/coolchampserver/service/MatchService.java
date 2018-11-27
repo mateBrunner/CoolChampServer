@@ -37,14 +37,34 @@ public class MatchService {
         matchRepository.save(match);
     }
 
+    public void deleteResult(Integer id) {
+        matchRepository.findById(id).clearResult();
+    }
+
     public Player getWinner(MatchResult result) {
-        if (result.getPoints().getPoint1() > result.getPoints().getPoint2()) {
-            return playerRepository.findById(result.getPlayer1_id());
-        } else if (result.getPoints().getPoint2() > result.getPoints().getPoint1()) {
-            return playerRepository.findById(result.getPlayer2_id());
-        } else {
-            return null;
+        if (result.getPoints().getPoint1() != null) {
+            if (result.getPoints().getPoint1() > result.getPoints().getPoint2()) {
+                return playerRepository.findById(result.getPlayer1_id());
+            } else if (result.getPoints().getPoint2() > result.getPoints().getPoint1()) {
+                return playerRepository.findById(result.getPlayer2_id());
+            } else {
+                return null;
+            }
         }
+        return null;
+    }
+
+    public Player getLoser(MatchResult result) {
+        if (result.getPoints().getPoint1() != null) {
+            if (result.getPoints().getPoint1() > result.getPoints().getPoint2()) {
+                return playerRepository.findById(result.getPlayer2_id());
+            } else if (result.getPoints().getPoint2() > result.getPoints().getPoint1()) {
+                return playerRepository.findById(result.getPlayer1_id());
+            } else {
+                return null;
+            }
+        }
+        return null;
     }
 
 
