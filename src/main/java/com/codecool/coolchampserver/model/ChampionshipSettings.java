@@ -15,16 +15,18 @@ public class ChampionshipSettings {
     private int numberOfGroups;
     private int numberOfMatches;
     private int sizeOfPlayoff;
+    private ParticipantType participantType;
     @JsonIgnore
     @OneToOne(mappedBy = "settings")
     private Championship championship;
 
-    public ChampionshipSettings(String newChampName, String format, int numberOfGroups, int numberOfMatches, int sizeOfPlayoff) {
+    public ChampionshipSettings(String newChampName, String format, int numberOfGroups, int numberOfMatches, int sizeOfPlayoff, ParticipantType participantType) {
         this.newChampName = newChampName;
         this.format = format;
         this.numberOfGroups = numberOfGroups;
         this.numberOfMatches = numberOfMatches;
         this.sizeOfPlayoff = sizeOfPlayoff;
+        this.participantType = participantType;
     }
 
     public ChampionshipSettings() {}
@@ -59,6 +61,8 @@ public class ChampionshipSettings {
         return sizeOfPlayoff;
     }
 
+    public ParticipantType getParticipantType () { return participantType; }
+
     public void setNewChampName(String newChampName) {
         this.newChampName = newChampName;
     }
@@ -78,6 +82,8 @@ public class ChampionshipSettings {
     public void setSizeOfPlayoff(int sizeOfPlayoff) {
         this.sizeOfPlayoff = sizeOfPlayoff;
     }
+
+    public void setParticipantType(ParticipantType participantType) { this.participantType = participantType; }
 
     public void update(ChampionshipSettings settings) {
         this.newChampName = settings.getNewChampName();

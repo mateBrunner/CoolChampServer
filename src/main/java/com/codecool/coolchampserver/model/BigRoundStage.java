@@ -12,7 +12,7 @@ public class BigRoundStage extends RegularStage {
 
     @ManyToMany(cascade = CascadeType.REFRESH)
     @OrderColumn
-    private List<Player> playerList;
+    private List<Participant> participantList;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Match> matches;
@@ -21,9 +21,9 @@ public class BigRoundStage extends RegularStage {
     private ExtraMatch extraMatch;
 
 
-    public BigRoundStage(Set<Player> players, int numberOfMatches) {
-        playerList = new ArrayList<>(players);
-        Collections.shuffle(playerList);
+    public BigRoundStage(Set<Participant> participants, int numberOfMatches) {
+        participantList = new ArrayList<>(participants);
+        Collections.shuffle(participantList);
         matches = new ArrayList<>();
         generateMatches(numberOfMatches);
     }
@@ -39,12 +39,12 @@ public class BigRoundStage extends RegularStage {
     }
 
     @Override
-    public List<Player> getPlayerList() {
-        return playerList;
+    public List<Participant> getParticipantList() {
+        return participantList;
     }
 
-    public void setPlayerList(List<Player> playerList) {
-        this.playerList = playerList;
+    public void setPlayerList(List<Participant> participantList) {
+        this.participantList = participantList;
     }
 
     public List<Match> getMatches() {
@@ -61,29 +61,29 @@ public class BigRoundStage extends RegularStage {
 
     private void generateMatches(int numberOfMatches) {
         for (int i = 1; i <= numberOfMatches / 2; i++) {
-            for (int j = 0; j < playerList.size(); j++ ) {
+            for (int j = 0; j < participantList.size(); j++ ) {
                 matches.add(new Match(
-                    playerList.get(j),
-                    playerList.get((j + i) % playerList.size())
+                        participantList.get(j),
+                        participantList.get((j + i) % participantList.size())
                 ));
             }
         }
         if (numberOfMatches % 2 == 1) {
-            for (int j = 0; j < playerList.size() / 2; j++ ) {
+            for (int j = 0; j < participantList.size() / 2; j++ ) {
                 matches.add(new Match(
-                   playerList.get(j),
-                   playerList.get((j + (playerList.size() / 2)) % playerList.size() )
+                        participantList.get(j),
+                        participantList.get((j + (participantList.size() / 2)) % participantList.size() )
                 ));
             }
 
-            if (playerList.size() % 2 == 1) {
+            if (participantList.size() % 2 == 1) {
                 Match match = new Match(
-                        playerList.get(playerList.size() - 1),
-                        playerList.get(playerList.size() / 2)
+                        participantList.get(participantList.size() - 1),
+                        participantList.get(participantList.size() / 2)
                 );
                 matches.add(match);
                 this.extraMatch = new ExtraMatch(
-                        playerList.get(playerList.size() / 2),
+                        participantList.get(participantList.size() / 2),
                         match
                 );
             }

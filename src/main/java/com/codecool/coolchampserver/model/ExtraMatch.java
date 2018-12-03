@@ -9,19 +9,19 @@ public class ExtraMatch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
-    private Player player;
+    private Participant participant;
     @ManyToOne
     private Match match;
 
-    public ExtraMatch(Player player, Match match) {
-        this.player = player;
+    public ExtraMatch(Participant participant, Match match) {
+        this.participant = participant;
         this.match = match;
     }
 
     public ExtraMatch() {}
 
-    public Player getPlayer() {
-        return player;
+    public Participant getParticipant() {
+        return participant;
     }
 
     public Match getMatch() {

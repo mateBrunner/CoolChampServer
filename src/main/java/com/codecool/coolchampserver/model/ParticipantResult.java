@@ -1,26 +1,26 @@
 package com.codecool.coolchampserver.model;
 
-public class PlayerResult implements Comparable<PlayerResult> {
+public class ParticipantResult implements Comparable<ParticipantResult> {
 
-    private Player player;
+    private Participant participant;
     private Integer numberOfPlayedMatches = 0;
     private Integer numberOfWonMatches = 0;
     private Integer numberOfWonSets = 0;
     private Integer numberOfLosenSets = 0;
     private Float averageOfOpponents = 0f;
 
-    public PlayerResult() {}
+    public ParticipantResult() {}
 
-    public PlayerResult(Player player) {
-        this.player = player;
+    public ParticipantResult(Participant participant) {
+        this.participant = participant;
     }
 
-    public Player getPlayer() {
-        return player;
+    public Participant getParticipant() {
+        return participant;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 
     public Integer getNumberOfPlayedMatches() {
@@ -84,7 +84,7 @@ public class PlayerResult implements Comparable<PlayerResult> {
     }
 
     @Override
-    public int compareTo(PlayerResult pr) {
+    public int compareTo(ParticipantResult pr) {
         int compare = pr.numberOfWonMatches.compareTo(numberOfWonMatches);
         if (compare == 0) {
             compare = pr.numberOfWonSets.compareTo(numberOfWonSets);

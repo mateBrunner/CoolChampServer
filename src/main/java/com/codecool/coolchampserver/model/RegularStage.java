@@ -12,7 +12,7 @@ public abstract class RegularStage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id = null;
 
-    public List<Player> getPlayerList() {
+    public List<Participant> getParticipantList() {
         return new ArrayList<>();
     }
 

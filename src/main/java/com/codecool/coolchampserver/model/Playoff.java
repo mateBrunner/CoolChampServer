@@ -63,15 +63,15 @@ public class Playoff {
         Position position;
         Match match;
         for (int ranking = champResult.getSizeOfPlayoff(); ranking > 0; ranking--) {
-            position = getPlayerInitPositionByRanking(ranking, champResult.getSizeOfPlayoff());
+            position = getParticipantInitPositionByRanking(ranking, champResult.getSizeOfPlayoff());
             match = getMatchByPosition(position).getMatch();
-            Player playerInPlace = position.getPlayerRow() == 0 ? match.getPlayer1() : match.getPlayer2();
-            Player playerInRanking = champResult.getPlayerResults().get(ranking-1).getPlayer();
-            if (!playerInRanking.equals(playerInPlace)) {
-                if (position.getPlayerRow() == 0) {
-                    match.setPlayer1(playerInRanking);
+            Participant participantInPlace = position.getParticipantRow() == 0 ? match.getParticipant1() : match.getParticipant2();
+            Participant participantInRanking = champResult.getParticipantResults().get(ranking-1).getParticipant();
+            if (!participantInRanking.equals(participantInPlace)) {
+                if (position.getParticipantRow() == 0) {
+                    match.setParticipant1(participantInRanking);
                 } else {
-                    match.setPlayer2(playerInRanking);
+                    match.setParticipant2(participantInRanking);
                 }
                 match.clearResult();
                 int row = position.getRow();
@@ -92,7 +92,7 @@ public class Playoff {
         return null;
     }
 
-    public Position getPlayerInitPositionByRanking(Integer ranking, Integer sizeOfPlayoff) {
+    public Position getParticipantInitPositionByRanking(Integer ranking, Integer sizeOfPlayoff) {
          boolean isPropagated = ranking <= Math.pow(2, Math.ceil(Math.log(sizeOfPlayoff) / Math.log(2))) - sizeOfPlayoff;
          int level = 4 - (int) Math.ceil(Math.log(sizeOfPlayoff) / Math.log(2)) + (isPropagated ? 1 : 0);
          for (int r = 0; r < RANKING_POSITIONS[level].length; r++) {
@@ -124,19 +124,19 @@ public class Playoff {
     }
 
     public List<Integer> getRankings(ChampionshipResult result) {
-        return result.getPlayerResults().stream().limit(result.getSizeOfPlayoff()).map(pr -> pr.getPlayer().getId()).collect(Collectors.toList());
+        return result.getParticipantResults().stream().limit(result.getSizeOfPlayoff()).map(pr -> pr.getParticipant().getId()).collect(Collectors.toList());
     }
 
 
     public static class Position {
         private int level;
         private int row;
-        private int playerRow;
+        private int participantRow;
 
-        public Position(int level, int row, int playerRow) {
+        public Position(int level, int row, int participantRow) {
             this.level = level;
             this.row = row;
-            this.playerRow = playerRow;
+            this.participantRow = participantRow;
         }
 
         public Position(int level, int row) {
@@ -146,7 +146,7 @@ public class Playoff {
 
         public int getLevel() {return this.level;}
         public int getRow() {return this.row;}
-        public int getPlayerRow() {return this.playerRow;}
+        public int getParticipantRow() {return this.participantRow;}
     }
 
 }

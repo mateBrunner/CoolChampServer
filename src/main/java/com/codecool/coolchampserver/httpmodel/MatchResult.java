@@ -3,15 +3,15 @@ package com.codecool.coolchampserver.httpmodel;
 public class MatchResult {
 
     private Integer matchId;
-    private Integer player1_id;
-    private Integer player2_id;
+    private Integer participant1_id;
+    private Integer participant2_id;
     private Points points;
 
 
-    public MatchResult(Integer matchId, Integer player1_id, Integer player2_id, Points points) {
+    public MatchResult(Integer matchId, Integer participant1_id, Integer participant2_id, Points points) {
         this.matchId = matchId;
-        this.player1_id = player1_id;
-        this.player2_id = player2_id;
+        this.participant1_id = participant1_id;
+        this.participant2_id = participant2_id;
         this.points = points;
     }
 
@@ -22,12 +22,12 @@ public class MatchResult {
         return matchId;
     }
 
-    public Integer getPlayer1_id() {
-        return player1_id;
+    public Integer getParticipant1_id() {
+        return participant1_id;
     }
 
-    public Integer getPlayer2_id() {
-        return player2_id;
+    public Integer getParticipant2_id() {
+        return participant2_id;
     }
 
     public Points getPoints() {

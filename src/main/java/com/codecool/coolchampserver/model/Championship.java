@@ -21,14 +21,14 @@ public class Championship {
     private ChampionshipSettings settings;
     @JsonIgnore
     @OneToOne(orphanRemoval = true, cascade = { CascadeType.ALL })
-    private TemporalPlayers temporalPlayers;
+    private TemporalParticipants temporalParticipants;
 
     public Championship() {}
 
-    public Championship(String name) {
+    public Championship(String name, ParticipantType pType) {
         this.status = ChampionshipStatus.NEW;
-        this.settings = new ChampionshipSettings(name, "big-round", 2, 3, 8);
-        this.temporalPlayers = new TemporalPlayers();
+        this.settings = new ChampionshipSettings(name, "big-round", 2, 3, 8, pType);
+        this.temporalParticipants = new TemporalParticipants();
     }
 
 
@@ -50,11 +50,11 @@ public class Championship {
         this.settings = settings;
     }
 
-    public TemporalPlayers getTemporalPlayers() {
-        return this.temporalPlayers;
+    public TemporalParticipants getTemporalParticipants() {
+        return this.temporalParticipants;
     }
 
-    public void setTemporalPlayers(TemporalPlayers temporalPlayers) { this.temporalPlayers = temporalPlayers; }
+    public void setTemporalParticipants(TemporalParticipants temporalParticipants) { this.temporalParticipants = temporalParticipants; }
 
     public RegularStage getRegularStage() {
         return regularStage;
