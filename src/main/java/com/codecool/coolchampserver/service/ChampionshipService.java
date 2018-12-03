@@ -1,14 +1,17 @@
 package com.codecool.coolchampserver.service;
 
 import com.codecool.coolchampserver.httpmodel.ChampionshipData;
+import com.codecool.coolchampserver.httpmodel.DoubleParticipantObject;
 import com.codecool.coolchampserver.model.*;
 import com.codecool.coolchampserver.repository.ChampionshipRepository;
-import com.codecool.coolchampserver.repository.PlayerRepository;
+import com.codecool.coolchampserver.repository.ParticipantRepository;
+import com.codecool.coolchampserver.repository.TablesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -18,19 +21,37 @@ public class ChampionshipService {
     ChampionshipRepository championshipRepository;
 
     @Autowired
-    PlayerRepository playerRepository;
+    ParticipantRepository participantRepository;
 
-    public List<ChampionshipData> getAllActualChampionships() {
-        List<Championship> actChamps = championshipRepository.findActualChampionships();
-        List<ChampionshipData> actChampsData = new ArrayList<>();
+    @Autowired
+    TablesRepository tablesRepository;
+
+    public List<ChampionshipData> getAllActualChampionshipsData() {
+        List<Championship> actChamps = getAllActualChampionships();
+        List<ChampionshipData> actChampsDataList = new ArrayList<>();
         for (Championship championship : actChamps) {
-            actChampsData.add(new ChampionshipData(championship.getId(), championship.getSettings().getNewChampName()));
+            actChampsDataList.add(new ChampionshipData(championship.getId(), championship.getSettings().getNewChampName()));
         }
-        return actChampsData;
+        return actChampsDataList;
     }
 
-    public Set<Player> getSelectedPlayers(Integer id) {
-        return championshipRepository.findById(id).getTemporalPlayers().getPlayers();
+    public List<Championship> getAllActualChampionships() {
+        return championshipRepository.findActualChampionships();
+    }
+
+    public List<ChampionshipData> getAllInProgressChampionshipsData() {
+        List<Championship> ipChamps = getAllInProgressChampionships();
+        List<ChampionshipData> ipChampsDataList = new ArrayList<>();
+        for (Championship championship : ipChamps) {
+            ipChampsDataList.add(new ChampionshipData(championship.getId(), championship.getSettings().getNewChampName()));
+        }
+        return ipChampsDataList;
+    }
+
+    public List<Championship> getAllInProgressChampionships() { return championshipRepository.findInProgressChampionships(); }
+
+    public Set<Participant> getSelectedParticipants(Integer id) {
+        return championshipRepository.findById(id).getTemporalParticipants().getParticipants();
     }
 
     public Championship getChampionshipById(Integer id) {
@@ -56,38 +77,59 @@ public class ChampionshipService {
     }
 
     @Transactional
-    public void selectPlayer(Integer champId, Integer playerId) {
+    public Set<Participant> addDouble(Integer champId) {
+        Championship championship = championshipRepository.findById(champId);
+        championship.getTemporalParticipants().addParticipant(new Doubles());
+        championshipRepository.save(championship);
+        return championship.getTemporalParticipants().getParticipants();
+    }
+
+    @Transactional
+    public Set<Participant> addPlayerToDouble(DoubleParticipantObject data) {
+        Doubles doubles = (Doubles) participantRepository.findById(data.getDoubleId());
+        doubles.addPlayer((Player) participantRepository.findById(data.getParticipantId()));
+        participantRepository.save(doubles);
+        return championshipRepository.findById(data.getChampId()).getTemporalParticipants().getParticipants();
+    }
+
+    @Transactional
+    public void selectParticipant(Integer champId, Integer participantId) {
         Championship champ = championshipRepository.findById(champId);
-        champ.getTemporalPlayers().addPlayer(playerRepository.findById(playerId));
+        champ.getTemporalParticipants().addParticipant(participantRepository.findById(participantId));
         championshipRepository.save(champ);
     }
 
     @Transactional
-    public void deselectPlayer(Integer champId, Integer playerId) {
+    public void deselectParticipant(Integer champId, Integer participantId) {
         Championship champ = championshipRepository.findById(champId);
-        champ.getTemporalPlayers().removePlayer(playerRepository.findById(playerId));
+        champ.getTemporalParticipants().removeParticipant(participantRepository.findById(participantId));
         championshipRepository.save(champ);
     }
 
-    public Integer createChampionship(String name) {
-        Championship newChampionship = new Championship(name);
+    public Integer createChampionship(ChampionshipData data) {
+        Championship newChampionship = new Championship(data.getName(), ParticipantType.valueOf(data.getType()));
         championshipRepository.save(newChampionship);
         return newChampionship.getId();
     }
 
     public void startChampionship(Integer id) {
         Championship champ = championshipRepository.findById(id);
-        Set<Player> players = champ.getTemporalPlayers().getPlayers();
+        Set<Participant> participants = champ.getTemporalParticipants().getParticipants();
         String format = champ.getSettings().getFormat();
         if (format.equals("big-round")) {
             int numberOfMatches = champ.getSettings().getNumberOfMatches();
-            champ.setRegularStage(new BigRoundStage(players, numberOfMatches));
+            champ.setRegularStage(new BigRoundStage(participants, numberOfMatches));
         } else if (format.equals("group")) {
             champ.setRegularStage(new GroupStage());
         }
         champ.setPlayoff(new Playoff(champ.getSettings().getSizeOfPlayoff()));
         champ.setStatus(ChampionshipStatus.INPROGRESS);
         championshipRepository.save(champ);
+
+        tablesRepository.findAll().stream().forEach(table -> {
+            table.addChampionship(champ);
+            tablesRepository.save(table);
+        });
     }
 
     public ChampionshipResult getChampionshipResult(Integer id) {

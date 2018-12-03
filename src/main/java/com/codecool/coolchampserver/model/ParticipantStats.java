@@ -1,30 +1,30 @@
 package com.codecool.coolchampserver.model;
 
 import com.codecool.coolchampserver.repository.MatchRepository;
-import com.codecool.coolchampserver.repository.PlayerRepository;
+import com.codecool.coolchampserver.repository.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class PlayerStats {
+public class ParticipantStats {
 
     MatchRepository matchRepository;
 
-    private Player player;
+    private Participant participant;
     private Integer numberOfPlayedMatches = 0;
     private Integer numberOfWonMatches = 0;
     private Integer numberOfLosenMatches = 0;
     private Integer mostWinInRow = 0;
     private Integer mostLoseInRow = 0;
-    private Player mostPlayedPlayer = null;
-    private Integer numberOfMatchesWithMostPlayedPlayer = 0;
-    private Integer wonAgainstMostPlayedPlayer = 0;
+    private Participant mostPlayedParticipant = null;
+    private Integer numberOfMatchesWithMostPlayedParticipant = 0;
+    private Integer wonAgainstMostPlayedParticipant = 0;
     private String dateOfFirstMatch = null;
     private String dateOfLastMatch = null;
 
-    public Player getPlayer() { return player; }
+    public Participant getParticipant() { return participant; }
 
     public Integer getNumberOfPlayedMatches() { return numberOfPlayedMatches; }
 
@@ -36,22 +36,22 @@ public class PlayerStats {
 
     public Integer getMostLoseInRow() { return mostLoseInRow; }
 
-    public Player getMostPlayedPlayer() { return mostPlayedPlayer; }
+    public Participant getMostPlayedParticipant() { return mostPlayedParticipant; }
 
-    public Integer getNumberOfMatchesWithMostPlayedPlayer() { return numberOfMatchesWithMostPlayedPlayer; }
+    public Integer getNumberOfMatchesWithMostPlayedParticipant() { return numberOfMatchesWithMostPlayedParticipant; }
 
-    public Integer getWonAgainstMostPlayedPlayer() { return wonAgainstMostPlayedPlayer; }
+    public Integer getWonAgainstMostPlayedParticipant() { return wonAgainstMostPlayedParticipant; }
 
     public String getDateOfFirstMatch() { return dateOfFirstMatch; }
 
     public String getDateOfLastMatch() { return dateOfLastMatch; }
 
-    public PlayerStats(Player player, List<Match> matches) {
-        this.player = player;
-        generatePlayerStats(player, matches);
+    public ParticipantStats(Participant participant, List<Match> matches) {
+        this.participant = participant;
+        generateParticipantStats(participant, matches);
     }
 
-    public void generatePlayerStats(Player player, List<Match> allMatch) {
+    public void generateParticipantStats(Participant participant, List<Match> allMatch) {
         numberOfPlayedMatches = allMatch.size();
         System.out.println("matches: " + numberOfPlayedMatches);
         if (numberOfPlayedMatches > 0) {
@@ -60,19 +60,19 @@ public class PlayerStats {
         }
 
         System.out.println("counting");
-        boolean isPlayer1;
+        boolean isParticipant1;
         boolean isWon;
-        Player winner;
-        Player opponent;
+        Participant winner;
+        Participant opponent;
         Integer wonInRow = 0;
         Integer loseInRow = 0;
-        Map<Player, Integer[]> opponents = new HashMap<>();
+        Map<Participant, Integer[]> opponents = new HashMap<>();
 
         for (Match match: allMatch) {
-            isPlayer1 = match.getPlayer1().getId() == player.getId();
-            opponent = isPlayer1 ? match.getPlayer2() : match.getPlayer1();
-            winner = match.getPoint1() > match.getPoint2() ? match.getPlayer1() : ( match.getPoint1() < match.getPoint2() ? match.getPlayer2() : null);
-            isWon = player == winner;
+            isParticipant1 = match.getParticipant1().getId() == participant.getId();
+            opponent = isParticipant1 ? match.getParticipant2() : match.getParticipant1();
+            winner = match.getPoint1() > match.getPoint2() ? match.getParticipant1() : ( match.getPoint1() < match.getPoint2() ? match.getParticipant2() : null);
+            isWon = participant == winner;
             if (isWon) {
                 numberOfWonMatches++;
                 wonInRow++;
@@ -94,11 +94,11 @@ public class PlayerStats {
 
         }
 
-        for (Player opp : opponents.keySet()) {
-            if (opponents.get(opp)[0] > numberOfMatchesWithMostPlayedPlayer) {
-                numberOfMatchesWithMostPlayedPlayer = opponents.get(opp)[0];
-                wonAgainstMostPlayedPlayer = opponents.get(opp)[1];
-                mostPlayedPlayer = opp;
+        for (Participant opp : opponents.keySet()) {
+            if (opponents.get(opp)[0] > numberOfMatchesWithMostPlayedParticipant) {
+                numberOfMatchesWithMostPlayedParticipant = opponents.get(opp)[0];
+                wonAgainstMostPlayedParticipant = opponents.get(opp)[1];
+                mostPlayedParticipant = opp;
             }
         }
 

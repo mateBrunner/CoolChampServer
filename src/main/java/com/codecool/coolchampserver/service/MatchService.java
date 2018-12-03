@@ -2,9 +2,9 @@ package com.codecool.coolchampserver.service;
 
 import com.codecool.coolchampserver.httpmodel.MatchResult;
 import com.codecool.coolchampserver.model.Match;
-import com.codecool.coolchampserver.model.Player;
+import com.codecool.coolchampserver.model.Participant;
 import com.codecool.coolchampserver.repository.MatchRepository;
-import com.codecool.coolchampserver.repository.PlayerRepository;
+import com.codecool.coolchampserver.repository.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public class MatchService {
     MatchRepository matchRepository;
 
     @Autowired
-    PlayerRepository playerRepository;
+    ParticipantRepository participantRepository;
 
 
     public Match getMatchById(Integer id) {
@@ -27,7 +27,7 @@ public class MatchService {
     public void updateMatch(MatchResult result) {
         Match match = getMatchById(result.getMatchId());
         match.setDate(new Date());
-        if (match.getPlayer1().getId() == result.getPlayer1_id() ) {
+        if (match.getParticipant1().getId() == result.getParticipant1_id() ) {
             match.setPoint1(result.getPoints().getPoint1());
             match.setPoint2(result.getPoints().getPoint2());
         } else {
@@ -41,12 +41,12 @@ public class MatchService {
         matchRepository.findById(id).clearResult();
     }
 
-    public Player getWinner(MatchResult result) {
+    public Participant getWinner(MatchResult result) {
         if (result.getPoints().getPoint1() != null) {
             if (result.getPoints().getPoint1() > result.getPoints().getPoint2()) {
-                return playerRepository.findById(result.getPlayer1_id());
+                return participantRepository.findById(result.getParticipant1_id());
             } else if (result.getPoints().getPoint2() > result.getPoints().getPoint1()) {
-                return playerRepository.findById(result.getPlayer2_id());
+                return participantRepository.findById(result.getParticipant2_id());
             } else {
                 return null;
             }
@@ -54,12 +54,12 @@ public class MatchService {
         return null;
     }
 
-    public Player getLoser(MatchResult result) {
+    public Participant getLoser(MatchResult result) {
         if (result.getPoints().getPoint1() != null) {
             if (result.getPoints().getPoint1() > result.getPoints().getPoint2()) {
-                return playerRepository.findById(result.getPlayer2_id());
+                return participantRepository.findById(result.getParticipant2_id());
             } else if (result.getPoints().getPoint2() > result.getPoints().getPoint1()) {
-                return playerRepository.findById(result.getPlayer1_id());
+                return participantRepository.findById(result.getParticipant1_id());
             } else {
                 return null;
             }

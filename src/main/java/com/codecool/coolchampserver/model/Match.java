@@ -12,28 +12,28 @@ public class Match {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @OneToOne(cascade = CascadeType.REFRESH)
-    private Player player1;
+    private Participant participant1;
     @OneToOne(cascade = CascadeType.REFRESH)
-    private Player player2;
+    private Participant participant2;
     private Integer point1;
     private Integer point2;
     private Date date;
 
-    public Match(Player player1, Player player2) {
-        this.player1 = player1;
-        this.player2 = player2;
+    public Match(Participant participant1, Participant participant2) {
+        this.participant1 = participant1;
+        this.participant2 = participant2;
     };
 
     public Match() {}
 
     public Integer getId() { return id; }
 
-    public Player getPlayer1() {
-        return player1;
+    public Participant getParticipant1() {
+        return participant1;
     }
 
-    public Player getPlayer2() {
-        return player2;
+    public Participant getParticipant2() {
+        return participant2;
     }
 
     public Integer getPoint1() {
@@ -46,12 +46,12 @@ public class Match {
 
     public Date getDate() { return date; }
 
-    public void setPlayer1(Player player1) {
-        this.player1 = player1;
+    public void setParticipant1(Participant participant1) {
+        this.participant1 = participant1;
     }
 
-    public void setPlayer2(Player player2) {
-        this.player2 = player2;
+    public void setParticipant2(Participant participant2) {
+        this.participant2 = participant2;
     }
 
     public void setPoint1(Integer point1) {
@@ -65,17 +65,17 @@ public class Match {
     public void setDate(Date date) { this.date = date; }
 
     public void clearMatch() {
-        this.player1 = null;
-        this.player2 = null;
+        this.participant1 = null;
+        this.participant2 = null;
         this.point1 = null;
         this.point2 = null;
     }
 
-    public void clearMatch(int playerNumber) {
+    public void clearMatch(int participantNumber) {
         this.point1 = null;
         this.point2 = null;
-        if (playerNumber == 1) { this.player1 = null; }
-        if (playerNumber == 2) { this.player2 = null; }
+        if (participantNumber == 1) { this.participant1 = null; }
+        if (participantNumber == 2) { this.participant2 = null; }
     }
 
     public void clearResult() {

@@ -1,19 +1,40 @@
-/*package com.codecool.coolchampserver.model;
+package com.codecool.coolchampserver.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class Participant {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Participant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String name;
+    protected Integer id;
+    protected String name;
+    protected Integer elo;
 
-    public Participant
+    public String getName() {
+        return name;
+    };
+
+    public Integer getId() {
+        return id;
+    };
+
+    public Integer getElo() {
+        return elo;
+    };
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setElo(Integer elo) {
+        this.elo = elo;
+    }
 
 
-}*/
+}
