@@ -6,6 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Player extends Participant {
@@ -58,4 +61,25 @@ public class Player extends Participant {
         return "id: " + this.id + "  name: " + this.name;
     }
 
+    @JsonIgnore
+    @Override
+    public List<Player> getPlayerss() {
+        List<Player> players = new ArrayList<>();
+        players.add(this);
+        return players;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(id, player.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
+    }
 }

@@ -16,4 +16,6 @@ public abstract class RegularStage {
         return new ArrayList<>();
     }
 
+    public abstract List<Match> getMatches();
+
 }

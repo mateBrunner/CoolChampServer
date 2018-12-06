@@ -92,6 +92,12 @@ public class ChampionshipController {
         return championshipService.getPlayoff(champId);
     }
 
+    @GetMapping("/championship-chances/{id}")
+    public String championshipChances(@PathVariable("id") Integer champId) {
+        championshipService.getChances(champId);
+        return "{\"value\":\"success\"}";
+    }
+
     @PostMapping("/update-championship-settings/{id}")
     public String updateChampionshipSettings(@RequestBody Map<String, ChampionshipSettings> body,
                                              @PathVariable("id") Integer champId) {

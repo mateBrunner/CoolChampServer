@@ -1,6 +1,9 @@
 package com.codecool.coolchampserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -36,5 +39,7 @@ public abstract class Participant {
         this.elo = elo;
     }
 
+    @JsonIgnore
+    public abstract List<Player> getPlayerss();
 
 }

@@ -13,7 +13,7 @@ public class Tables {
     private Integer col;
     private Integer row;
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST})
-    private Match match;
+    private TableMatch tableMatch;
     @ManyToMany(cascade = CascadeType.MERGE)
     private List<Championship> championships;
 
@@ -42,9 +42,9 @@ public class Tables {
 
     public void setRow(Integer row) { this.row = row; }
 
-    public Match getMatch() { return this.match; }
+    public TableMatch getTableMatch() { return this.tableMatch; }
 
-    public void setMatch(Match match) { this.match = match; }
+    public void setTableMatch(TableMatch match) { this.tableMatch = match; }
 
     public List<Championship> getChampionships() { return this.championships; }
 

@@ -3,7 +3,10 @@ package com.codecool.coolchampserver.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Match {
@@ -83,8 +86,34 @@ public class Match {
         this.point2 = null;
     }
 
+    @JsonIgnore
     public boolean isPlayed() {
         return this.point1 != null;
     }
 
+    @JsonIgnore
+    public boolean isPlayable() {
+        return this.participant1 != null && this.participant2 != null && this.point1 == null;
+    }
+
+    @JsonIgnore
+    public List<Player> getPlayers() {
+        List<Player> players = new ArrayList<>();
+        players.addAll(participant1.getPlayerss());
+        players.addAll(participant2.getPlayerss());
+        return players;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Match match = (Match) o;
+        return Objects.equals(id, match.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, participant1, participant2, point1, point2, date);
+    }
 }

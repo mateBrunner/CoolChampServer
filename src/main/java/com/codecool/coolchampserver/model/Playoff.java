@@ -149,4 +149,13 @@ public class Playoff {
         public int getParticipantRow() {return this.participantRow;}
     }
 
+    public boolean containsMatch(Integer matchId) {
+        for (PlayoffMatch poMatch: matches) {
+            if (poMatch.getMatch().getId().equals(matchId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -7,12 +7,15 @@ import com.codecool.coolchampserver.repository.ChampionshipRepository;
 import com.codecool.coolchampserver.repository.ParticipantRepository;
 import com.codecool.coolchampserver.repository.TablesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ChampionshipService {
@@ -36,7 +39,7 @@ public class ChampionshipService {
     }
 
     public List<Championship> getAllActualChampionships() {
-        return championshipRepository.findActualChampionships();
+        return championshipRepository.findByStatusEqualsOrStatusEquals(ChampionshipStatus.NEW, ChampionshipStatus.INPROGRESS);
     }
 
     public List<ChampionshipData> getAllInProgressChampionshipsData() {
@@ -156,5 +159,33 @@ public class ChampionshipService {
         champ.setStatus(ChampionshipStatus.ARCHIVE);
         championshipRepository.save(champ);
     }
+
+    public List<Match> getPlayableMatches(Championship champ) {
+        List<Match> regMatches = champ.getRegularStage().getMatches().stream().filter(match -> !match.isPlayed()).collect(Collectors.toList());
+        if (regMatches.size() > 0) {
+            return regMatches;
+        }
+        if (champ.getSettings().getFormat().equals("big-round")) {
+            champ.getPlayoff().recountFromBiground(ChampionshipResult.generateResult(champ));
+            championshipRepository.save(champ);
+        }
+        return champ.getPlayoff().getMatches().stream().map(poMatch -> poMatch.getMatch()).filter(match -> match.isPlayable()).collect(Collectors.toList());
+    }
+
+    public void getChances(Integer champId) {
+        File file =
+                new File("src/main/resources/static/2-set.csv");
+        try {
+            Scanner sc = new Scanner(file);
+            while (sc.hasNextLine())
+                for (String s : sc.nextLine().split(",")) {
+                    System.out.println(Float.valueOf(s));
+                }
+        } catch (IOException ie) {
+            System.out.println(ie);
+        }
+    }
+
+
 
 }

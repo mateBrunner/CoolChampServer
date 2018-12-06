@@ -26,10 +26,7 @@ public class PlayoffService {
         Participant loser = matchService.getLoser(result.getResult());
         Integer level = null;
         Integer row = null;
-        System.out.println("*****************");
-        System.out.println("result: " + result.getResult().getMatchId());
         for (PlayoffMatch poMatch : championshipRepository.findById(result.getChampId()).getPlayoff().getMatches()) {
-            System.out.println("pomatch: " + poMatch.getMatch().getId());
             if (result.getResult().getMatchId().equals(poMatch.getMatch().getId())) {
                 level = poMatch.getLevel();
                 row = poMatch.getRow();

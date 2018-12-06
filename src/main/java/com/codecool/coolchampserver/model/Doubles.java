@@ -51,4 +51,9 @@ public class Doubles extends Participant {
         }
     }
 
+    @Override
+    public List<Player> getPlayerss() {
+        return players;
+    }
+
 }
